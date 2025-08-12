@@ -9,18 +9,18 @@ A Dart project to send gameplay payloads to 「舞萌DX」.
 
 ## ✨ Features
 
---1. Retrieve the latest SDGB opt file--
+1. ~~Retrieve the latest SDGB opt file~~
 2. `UserLoginApi`: Log in
 3. `UserLogoutApi`: Log out
---4. Advance area travel by 99 kilometers--
---5. Score submission (overwrites existing records)--
+4. ~~Advance area travel by 99 kilometers~~
+5. ~~Score submission (overwrites existing records)~~
 6. `GetUserPreviewApi`: Fetch user preview data
-7. Basic HTTP communication module (can be used to implement other APIs)
+7. ~~Basic HTTP communication module (can be used to implement other APIs)~~
 8. `UpsertUserChargelogApi`: Send charge logs (e.g.,   6X boost tickets)
---9. Unlock all songs from **「舞萌DX」** up to **「舞萌DX 2024」**  --
+9. ~~Unlock all songs from **「舞萌DX」** up to **「舞萌DX 2024」**~~  
 
-> ⚠️ Re:Master charts for songs that have them are not unlocked yet
---10. Unlock a specific song--
+> ~~⚠️ Re:Master charts for songs that have them are not unlocked yet~~
+~~--10. Unlock a specific song--~~
 
 11. `GetUserDataApi`: Fetch detailed user data (including all records and collections)
 
@@ -58,5 +58,6 @@ MIT License
 ## 🤝 Acknowledgements
 
 [**techno\_kitchen\_dart**](https://github.com/qianmo2233/techno_kitchen_dart)
+
 **Special thanks LEAKERS**
 
