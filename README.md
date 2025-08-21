@@ -16,7 +16,7 @@ A Dart project to send gameplay payloads to 「舞萌DX」.
 5. ~~Score submission (overwrites existing records)~~
 6. `GetUserPreviewApi`: Fetch user preview data
 7. ~~Basic HTTP communication module (can be used to implement other APIs)~~
-8. `UpsertUserChargelogApi`: Send charge logs (e.g.,   6X boost tickets)
+8. `UpsertUserChargelogApi`: Send charge logs (3X boost tickets.,6X boost tickets)
 9. ~~Unlock all songs from **「舞萌DX」** up to **「舞萌DX 2024」**~~  
 
 > ~~⚠️ Re:Master charts for songs that have them are not unlocked yet~~
