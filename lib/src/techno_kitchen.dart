@@ -100,26 +100,30 @@ class TechnoKitchen {
     return result;
   }
 
-  Future<String> getTicket(int userId) async {
+  Future<String> getTicket(int userId, int multiplier) async {
     tzdata.initializeTimeZones();
     final shanghai = tz.getLocation('Asia/Shanghai');
     final now = tz.TZDateTime.now(shanghai).subtract(Duration(hours: 1));
     final purchaseDate = DateFormat("yyyy-MM-dd HH:mm:ss.0").format(now);
-    final validDate = DateFormat("yyyy-MM-dd HH:mm:ss").format(
-      now.add(Duration(days: 90)).copyWith(hour: 4, minute: 0, second: 0),
-    );
+    final validDate = DateFormat("yyyy-MM-dd").format(
+      now.add(Duration(days: 90)),
+    ) + " 04:00:00";
+
+  // 根据倍数确定票种信息
+    final chargeId = multiplier == 3 ? 3 : 6;
+    final price = multiplier == 3 ? 2 : 4;
 
     final data = {
       "userId": userId,
       "userCharge": {
-        "chargeId": 6,
+        "chargeId": chargeId,
         "stock": 1,
         "purchaseDate": purchaseDate,
         "validDate": validDate,
       },
       "userChargelog": {
-        "chargeId": 6,
-        "price": 4,
+        "chargeId": chargeId,
+        "price": price,
         "purchaseDate": purchaseDate,
         "placeId": _arcadeInfo.placeId,
         "regionId": _arcadeInfo.regionId,
@@ -132,7 +136,6 @@ class TechnoKitchen {
       "UpsertUserChargelogApi",
       userId,
     );
-
     return result;
-  }
+}
 }
