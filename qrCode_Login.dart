@@ -20,6 +20,8 @@ void main() async {
     print('qrResponse: ${jsonEncode(qrResponse)}');
     if (qrResponse['errorID'] != 0) {
       print('解析失败，二维码过期');
+      print('5秒后自动退出');
+      await Future.delayed(Duration(seconds: 5));
       return;
     }
     userId = int.parse(qrResponse['userID'].toString());
@@ -28,6 +30,8 @@ void main() async {
     userId = int.parse(input);
   } else {
     print('输入格式错误');
+    print('5秒后自动退出');
+    await Future.delayed(Duration(seconds: 5));
     return;
   }
   // Step 2: preview
@@ -44,6 +48,8 @@ void main() async {
       print('输入无效,自动登出');
       final logout = await technoKitchen.logout(userId, timestampsinmai);
       print('UserLogout: $logout');
+      print('5秒后自动退出');
+      await Future.delayed(Duration(seconds: 5));
     } else {
       final ticketid = ticketidinput;
       final getTicket = await technoKitchen.getTicket(userId, int.parse(ticketid));
@@ -56,8 +62,12 @@ void main() async {
     // Step 5: logout
     final logout = await technoKitchen.logout(userId, timestampsinmai);
     print('UserLogout: $logout');
+    print('5秒后自动退出');
+    await Future.delayed(Duration(seconds: 5));
     }
   } else {
     print('登录失败，二维码超时');
+    print('5秒后自动退出');
+    await Future.delayed(Duration(seconds: 5));
   }
 }
