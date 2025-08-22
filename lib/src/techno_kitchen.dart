@@ -31,10 +31,14 @@ class TechnoKitchen {
   get musicData => _musicData;
   get arcadeInfo => _arcadeInfo;
 
+
+//二维码解析userID#########################################################
   Future<String> getUserId(String qrCode) async {
     return (await _client.qrApi(qrCode))['userID'] as String;
   }
+//二维码解析userID#########################################################
 
+//登入#########################################################
   Future<String> login(int userId, int timestamp) async {
     final data = {
       "userId": userId,
@@ -46,16 +50,16 @@ class TechnoKitchen {
       "isContinue": false,
       "genericFlag": 0,
     };
-
     String result = await _client.sdgbApi(
       jsonEncode(data),
       "UserLoginApi",
       userId,
     );
-
     return result;
   }
+//登入#########################################################
 
+//登出#########################################################
   Future<String> logout(int userId, int timestamp) async {
     final data = {
       "userId": userId,
@@ -66,40 +70,52 @@ class TechnoKitchen {
       "dateTime": timestamp,
       "type": 1,
     };
-
     final result = await _client.sdgbApi(
       jsonEncode(data),
       "UserLogoutApi",
       userId,
     );
-
     return result;
   }
+//登出#########################################################
 
+//账号预览#########################################################
   Future<String> preview(int userId) async {
     final data = {"userId": userId};
-
     final result = await _client.sdgbApi(
       jsonEncode(data),
       "GetUserPreviewApi",
       userId,
     );
-
     return result;
   }
+//账号预览#########################################################
 
+//玩家数据#########################################################
   Future<String> userdata(int userId) async {
     final data = {"userId": userId};
-
     final result = await _client.sdgbApi(
       jsonEncode(data),
       "GetUserDataApi",
       userId,
     );
-
     return result;
   }
+//玩家数据#########################################################
 
+//买票记录#########################################################
+  Future<String> getUsercharge(int userId) async {
+    final data = {"userId": userId};
+    final result = await _client.sdgbApi(
+      jsonEncode(data),
+      "GetUserChargeApi",
+      userId,
+    );
+    return result;
+  }
+//买票记录#########################################################
+
+//发票#########################################################
   Future<String> getTicket(int userId, int multiplier) async {
     tzdata.initializeTimeZones();
     final shanghai = tz.getLocation('Asia/Shanghai');
@@ -108,11 +124,8 @@ class TechnoKitchen {
     final validDate = DateFormat("yyyy-MM-dd").format(
       now.add(Duration(days: 90)),
     ) + " 04:00:00";
-
-  // 根据倍数确定票种信息
     final chargeId = multiplier == 3 ? 3 : 6;
     final price = multiplier == 3 ? 2 : 4;
-
     final data = {
       "userId": userId,
       "userCharge": {
@@ -130,12 +143,12 @@ class TechnoKitchen {
         "clientId": _arcadeInfo.clientId,
       },
     };
-
     final result = await _client.sdgbApi(
       jsonEncode(data),
       "UpsertUserChargelogApi",
       userId,
     );
     return result;
-}
+  }
+//发票#########################################################
 }
