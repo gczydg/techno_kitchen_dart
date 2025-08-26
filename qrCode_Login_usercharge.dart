@@ -20,8 +20,8 @@ void main() async {
     print('qrResponse: ${jsonEncode(qrResponse)}');
     if (qrResponse['errorID'] != 0) {
       print('解析失败，二维码过期');
-      print('5秒后自动退出');
-      await Future.delayed(Duration(seconds: 5));
+      print('30秒后自动退出');
+      await Future.delayed(Duration(seconds: 30));
       return;
     }
     userId = int.parse(qrResponse['userID'].toString());
@@ -30,8 +30,8 @@ void main() async {
     userId = int.parse(input);
   } else {
     print('输入格式错误');
-    print('5秒后自动退出');
-    await Future.delayed(Duration(seconds: 5));
+    print('30秒后自动退出');
+    await Future.delayed(Duration(seconds: 30));
     return;
   }
   // Step 2: preview
@@ -41,33 +41,18 @@ void main() async {
   final login = await technoKitchen.login(userId, timestampsinmai);
   print('UserLogin: $login');
   if (login.startsWith('{"returnCode":1,')) {
-    // Step 4: getTicket
-    print('请输入功能票倍数（3或6）:');
-    final ticketidinput = stdin.readLineSync();
-    if (ticketidinput == null || (ticketidinput != '3' && ticketidinput != '6')) {
-      print('输入无效,自动登出');
-      final logout = await technoKitchen.logout(userId, timestampsinmai);
-      print('UserLogout: $logout');
-      print('5秒后自动退出');
-      await Future.delayed(Duration(seconds: 5));
-    } else {
-      final ticketid = ticketidinput;
-      final getTicket = await technoKitchen.getTicket(userId, int.parse(ticketid));
-      print('GetTicket: $getTicket');
-      if (getTicket.startsWith('{"returnCode":1,')) {
-      print('发票成功');
-      } else {
-        print('发票失败或账号内已有该功能票');
-      }
+    // Step 4: getUsercharge
+    final usercharge = await technoKitchen.getUsercharge(userId);
+    print('Usercharge: $usercharge');
+    printUserChargeDescription(usercharge);
     // Step 5: logout
     final logout = await technoKitchen.logout(userId, timestampsinmai);
     print('UserLogout: $logout');
-    print('5秒后自动退出');
-    await Future.delayed(Duration(seconds: 5));
-    }
+    print('30秒后自动退出');
+    await Future.delayed(Duration(seconds: 30));
   } else {
     print('登录失败，二维码超时');
-    print('5秒后自动退出');
-    await Future.delayed(Duration(seconds: 5));
+    print('30秒后自动退出');
+    await Future.delayed(Duration(seconds: 30));
   }
 }
