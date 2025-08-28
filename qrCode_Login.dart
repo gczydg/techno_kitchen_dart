@@ -22,6 +22,8 @@ void main() async {
       print('5秒后自动退出');
       await Future.delayed(Duration(seconds: 5));
       return;
+    } else{
+      print('解析成功, userID: ${qrResponse['userID']}');
     }
     userId = int.parse(qrResponse['userID'].toString());
   } else if (input.length == 8 && int.tryParse(input) != null) {
@@ -74,9 +76,11 @@ void main() async {
         return;
       } else {
         print('登出成功');
+        print('5秒后自动退出');
+        await Future.delayed(Duration(seconds: 5));
       }
     } catch (e) {
       print('解析preview数据时出错: $e');
     }
   }
-}
+} 
