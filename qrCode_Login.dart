@@ -1,8 +1,7 @@
-import 'dart:convert';
-import 'package:techno_kitchen_dart/techno_kitchen_dart.dart';
-import 'package:timezone/data/latest_10y.dart' as tzdata;
 import 'dart:io'; 
-
+import 'dart:convert';
+import 'package:techno_kitchen_dart/techno_kitchen_dart_web.dart';
+import 'package:timezone/data/latest_10y.dart' as tzdata;
 void main() async {
   tzdata.initializeTimeZones();
   final technoKitchen = TechnoKitchen();
@@ -36,38 +35,48 @@ void main() async {
   }
   // Step 2: preview
   final preview = await technoKitchen.preview(userId);
-  print('UserPreview:$preview');
+  printUserPreviewDescription(preview);
+  try {
+    final previewData = jsonDecode(preview);
+    final isLogin = previewData['isLogin'] as bool;
+    if (isLogin) {
+      print('当前账号已登录，请先解小黑屋');
+      return;
+    }
+  } catch (e) {
+    print('解析preview数据时出错: $e');
+  }
   // Step 3: login
   final login = await technoKitchen.login(userId, timestampsinmai);
-  print('UserLogin: $login');
-  if (login.startsWith('{"returnCode":1,')) {
+  final loginSuccess = printUserLoginDescription(login);
+  if (loginSuccess) {
     // Step 4: getTicket
     print('请输入功能票倍数（3或6）:');
     final ticketidinput = stdin.readLineSync();
     if (ticketidinput == null || (ticketidinput != '3' && ticketidinput != '6')) {
       print('输入无效,自动登出');
-      final logout = await technoKitchen.logout(userId, timestampsinmai);
-      print('UserLogout: $logout');
-      print('5秒后自动退出');
-      await Future.delayed(Duration(seconds: 5));
     } else {
       final ticketid = ticketidinput;
-      final getTicket = await technoKitchen.getTicket(userId, int.parse(ticketid));
-      print('GetTicket: $getTicket');
-      if (getTicket.startsWith('{"returnCode":1,')) {
-      print('发票成功');
-      } else {
-        print('发票失败或账号内已有该功能票');
-      }
-    // Step 5: logout
-    final logout = await technoKitchen.logout(userId, timestampsinmai);
-    print('UserLogout: $logout');
-    print('5秒后自动退出');
-    await Future.delayed(Duration(seconds: 5));
+      final UpsertUserCharge = await technoKitchen.getTicket(userId, int.parse(ticketid));
+      printUpsertUserChargeResponse(UpsertUserCharge);
     }
-  } else {
-    print('登录失败，二维码超时');
-    print('5秒后自动退出');
-    await Future.delayed(Duration(seconds: 5));
+    // Step 5: logout
+    await technoKitchen.logout(userId, timestampsinmai);
+    // Step 6: checkisloginstatus
+    final preview = await technoKitchen.preview(userId);
+    try {
+      final previewData = jsonDecode(preview);
+      final isLogin = previewData['isLogin'] as bool;
+      if (isLogin) {
+        print('登出失败，请用时间戳重试');
+        print('Timestamp: $timestampsinmai');
+        await Future.delayed(Duration(seconds: 30));
+        return;
+      } else {
+        print('登出成功');
+      }
+    } catch (e) {
+      print('解析preview数据时出错: $e');
+    }
   }
 }
