@@ -48,16 +48,24 @@ void main() async {
   } catch (e) {
     print('解析preview数据时出错: $e');
   }
+  // Step 2.9: CheckUserChargeStock
+  final usercharge = await technoKitchen.getUsercharge(userId);
+  final hasTicket = printUserChargeDescription(usercharge);
+  if (hasTicket) {
+    print('不执行后续操作');
+    return;
+  }
   // Step 3: login
   final login = await technoKitchen.login(userId, timestampsinmai);
   final loginSuccess = printUserLoginDescription(login);
   if (loginSuccess) {
-    // Step 4: getTicket
+    // Step 4: TaskCheck
     print('请输入功能票倍数（3或6）:');
     final ticketidinput = stdin.readLineSync();
     if (ticketidinput == null || (ticketidinput != '3' && ticketidinput != '6')) {
       print('输入无效,自动登出');
     } else {
+      // Step 4.9: getTicket
       final ticketid = ticketidinput;
       final UpsertUserCharge = await technoKitchen.getTicket(userId, int.parse(ticketid));
       printUpsertUserChargeResponse(UpsertUserCharge);

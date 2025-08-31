@@ -5,10 +5,10 @@ bool printUpsertUserChargeResponse(String userChargeJson) {
     final data = jsonDecode(userChargeJson);
     final returnCode = data['returnCode'];
     if (returnCode == 1) {
-      print('发票成功');
+      print('发票成功，请等待账号登出');
       return true;
     } else {
-      print('发票失败或账号内已有该功能票');
+      print('发票失败，请等待账号登出');
     }
     return false;
   } catch (e) {
